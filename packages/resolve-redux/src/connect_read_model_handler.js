@@ -1,7 +1,7 @@
 import { delay, getRootableUrl } from './utils'
 import actions from './actions'
 
-const subscribeReadModel = (
+const connectReadModelHandler = (
   { origin, rootPath, store, readModelSubscriptions, adapter, orderedFetch },
   action
 ) => {
@@ -91,4 +91,4 @@ const subscribeReadModel = (
   fetchReadModel()
 }
 
-export default subscribeReadModel
+export default connectReadModelHandler

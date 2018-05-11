@@ -1,92 +1,191 @@
 import uuid from 'uuid/v4'
 
 import {
-  MERGE,
-  SEND_COMMAND,
-  SUBSCRIBE_VIEWMODEL,
-  UNSUBSCRIBE_VIEWMODEL,
-  SUBSCRIBE_READMODEL,
-  UNSUBSCRIBE_READMODEL,
-  READMODEL_LOAD_INITIAL_STATE,
-  READMODEL_DROP_STATE,
-  PROVIDE_VIEW_MODELS,
-  DISCONNECT,
+  SEND_COMMAND_REQUEST,
+  SEND_COMMAND_SUCCESS,
+  SEND_COMMAND_FAILURE,
+  SUBSCRIBE_TOPIC,
+  UNSUBSCRIBE_TOPIC,
+  CONNECT_VIEWMODEL,
+  DISCONNECT_VIEWMODEL,
+  LOAD_VIEWMODEL_STATE_REQUEST,
+  LOAD_VIEWMODEL_STATE_SUCCESS,
+  LOAD_VIEWMODEL_STATE_FAILURE,
+  DROP_VIEWMODEL_STATE,
+  CONNECT_READMODEL,
+  DISCONNECT_READMODEL,
+  LOAD_READMODEL_STATE_REQUEST,
+  LOAD_READMODEL_STATE_SUCCESS,
+  LOAD_READMODEL_STATE_FAILURE,
+  APPLY_READMODEL_DIFF,
+  DROP_READMODEL_STATE,
   HOT_MODULE_REPLACEMENT
 } from './action_types'
 
-const merge = (viewModelName, aggregateId, state) => ({
-  type: MERGE,
-  viewModelName,
-  aggregateId,
-  state
-})
-
-const sendCommand = ({ command, aggregateId, aggregateName, payload }) => ({
-  type: SEND_COMMAND,
+const sendCommandRequest = (command, aggregateId, aggregateName, payload) => ({
+  type: SEND_COMMAND_REQUEST,
   command,
   aggregateId,
   aggregateName,
   payload
 })
 
-const subscribeViewModel = (viewModelName, aggregateId) => ({
-  type: SUBSCRIBE_VIEWMODEL,
-  viewModelName,
-  aggregateId
+const sendCommandSuccess = (command, aggregateId, aggregateName, payload) => ({
+  type: SEND_COMMAND_SUCCESS,
+  command,
+  aggregateId,
+  aggregateName,
+  payload
 })
 
-const unsubscribeViewModel = (viewModelName, aggregateId) => ({
-  type: UNSUBSCRIBE_VIEWMODEL,
-  viewModelName,
-  aggregateId
+const sendCommandFailure = (
+  command,
+  aggregateId,
+  aggregateName,
+  payload,
+  error
+) => ({
+  type: SEND_COMMAND_FAILURE,
+  command,
+  aggregateId,
+  aggregateName,
+  payload,
+  error
 })
 
-const subscribeReadModel = (
+const subscibeTopic = (appId, topicName, topicId) => ({
+  type: SUBSCRIBE_TOPIC,
+  appId,
+  topicName,
+  topicId
+})
+
+const unsubscibeTopic = (appId, topicName, topicId) => ({
+  type: UNSUBSCRIBE_TOPIC,
+  appId,
+  topicName,
+  topicId
+})
+
+const connectViewModel = (viewModelName, aggregateIds) => ({
+  type: CONNECT_VIEWMODEL,
+  viewModelName,
+  aggregateIds
+})
+
+const disconnectViewModel = (viewModelName, aggregateIds) => ({
+  type: DISCONNECT_VIEWMODEL,
+  viewModelName,
+  aggregateIds
+})
+
+const loadViewModelStateRequest = (viewModelName, aggregateIds) => ({
+  type: LOAD_VIEWMODEL_STATE_REQUEST,
+  viewModelName,
+  aggregateIds
+})
+
+const loadViewModelStateSuccess = (viewModelName, aggregateIds, state) => ({
+  type: LOAD_VIEWMODEL_STATE_SUCCESS,
+  viewModelName,
+  aggregateIds,
+  state
+})
+
+const loadViewModelStateFailure = (viewModelName, aggregateIds, error) => ({
+  type: LOAD_VIEWMODEL_STATE_FAILURE,
+  viewModelName,
+  aggregateIds,
+  error
+})
+
+const dropViewModelState = (viewModelName, aggregateIds) => ({
+  type: DROP_VIEWMODEL_STATE,
+  viewModelName,
+  aggregateIds
+})
+
+const connectReadModel = (
   readModelName,
   resolverName,
-  parameters,
+  resolverArgs,
   isReactive
 ) => ({
-  type: SUBSCRIBE_READMODEL,
+  type: CONNECT_READMODEL,
   readModelName,
   resolverName,
-  parameters,
+  resolverArgs,
   isReactive
 })
 
-const unsubscribeReadModel = (readModelName, resolverName) => ({
-  type: UNSUBSCRIBE_READMODEL,
-  readModelName,
-  resolverName
-})
-
-const loadReadModelInitialState = (
+const disconnectReadModel = (
   readModelName,
   resolverName,
-  initialState,
-  serialId
+  resolverArgs,
+  isReactive
 ) => ({
-  type: READMODEL_LOAD_INITIAL_STATE,
+  type: DISCONNECT_READMODEL,
   readModelName,
   resolverName,
-  initialState,
-  serialId
+  resolverArgs,
+  isReactive
 })
 
-const dropReadModelState = (readModelName, resolverName) => ({
-  type: READMODEL_DROP_STATE,
+const loadReadModelStateRequest = (
   readModelName,
-  resolverName
+  resolverName,
+  resolverArgs
+) => ({
+  type: LOAD_READMODEL_STATE_REQUEST,
+  readModelName,
+  resolverName,
+  resolverArgs
 })
 
-const provideViewModels = viewModels => ({
-  type: PROVIDE_VIEW_MODELS,
-  viewModels
+const loadReadModelStateSuccess = (
+  readModelName,
+  resolverName,
+  resolverArgs,
+  state
+) => ({
+  type: LOAD_READMODEL_STATE_SUCCESS,
+  readModelName,
+  resolverName,
+  resolverArgs,
+  state
 })
 
-const disconnect = reason => ({
-  type: DISCONNECT,
-  reason
+const loadReadModelStateFailure = (
+  readModelName,
+  resolverName,
+  resolverArgs,
+  error
+) => ({
+  type: LOAD_READMODEL_STATE_FAILURE,
+  readModelName,
+  resolverName,
+  resolverArgs,
+  error
+})
+
+const applyReadModelDiff = (
+  readModelName,
+  resolverName,
+  resolverArgs,
+  diff
+) => ({
+  type: APPLY_READMODEL_DIFF,
+  readModelName,
+  resolverName,
+  resolverArgs,
+  diff
+})
+
+const dropReadModelState = (readModelName, resolverName, resolverArgs) => ({
+  type: DROP_READMODEL_STATE,
+  readModelName,
+  resolverName,
+  resolverArgs
 })
 
 const hotModuleReplacement = () => ({
@@ -95,15 +194,23 @@ const hotModuleReplacement = () => ({
 })
 
 export default {
-  merge,
-  sendCommand,
-  subscribeViewModel,
-  unsubscribeViewModel,
-  provideViewModels,
-  subscribeReadModel,
-  unsubscribeReadModel,
-  loadReadModelInitialState,
+  sendCommandRequest,
+  sendCommandSuccess,
+  sendCommandFailure,
+  subscibeTopic,
+  unsubscibeTopic,
+  connectViewModel,
+  disconnectViewModel,
+  loadViewModelStateRequest,
+  loadViewModelStateSuccess,
+  loadViewModelStateFailure,
+  dropViewModelState,
+  connectReadModel,
+  disconnectReadModel,
+  loadReadModelStateRequest,
+  loadReadModelStateSuccess,
+  loadReadModelStateFailure,
+  applyReadModelDiff,
   dropReadModelState,
-  disconnect,
   hotModuleReplacement
 }
