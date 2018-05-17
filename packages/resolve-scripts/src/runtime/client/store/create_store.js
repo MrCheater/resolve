@@ -15,8 +15,11 @@ const viewModels = require($resolve.viewModels)
 const readModels = require($resolve.readModels)
 const aggregates = require($resolve.aggregates)
 const subscribeAdapter = require($resolve.subscribe.adapter)
+const isClient = require($resolve.isClient)
 
 export default ({ initialState, history, origin, rootPath }) => {
+  const resolveMiddleware = createResolveMiddleware(isClient)
+  
   const store = createStore(
     combineReducers({
       ...reducers,
@@ -29,20 +32,22 @@ export default ({ initialState, history, origin, rootPath }) => {
     composeWithDevTools(
       applyMiddleware(
         routerMiddleware(history),
-        createResolveMiddleware({
-          viewModels,
-          readModels,
-          aggregates,
-          subscribeAdapter,
-          origin,
-          rootPath
-        }),
+        resolveMiddleware,
         ...middlewares
       )
     )
   )
 
   setupStore(store, middlewares)
+  
+  resolveMiddleware.run({
+    viewModels,
+    readModels,
+    aggregates,
+    subscribeAdapter,
+    origin,
+    rootPath
+  })
 
   return store
 }

@@ -22,7 +22,7 @@ import {
   HOT_MODULE_REPLACEMENT
 } from './action_types'
 
-const sendCommandRequest = (command, aggregateId, aggregateName, payload) => ({
+export const sendCommandRequest = (command, aggregateId, aggregateName, payload) => ({
   type: SEND_COMMAND_REQUEST,
   command,
   aggregateId,
@@ -30,7 +30,7 @@ const sendCommandRequest = (command, aggregateId, aggregateName, payload) => ({
   payload
 })
 
-const sendCommandSuccess = (command, aggregateId, aggregateName, payload) => ({
+export const sendCommandSuccess = (command, aggregateId, aggregateName, payload) => ({
   type: SEND_COMMAND_SUCCESS,
   command,
   aggregateId,
@@ -38,7 +38,7 @@ const sendCommandSuccess = (command, aggregateId, aggregateName, payload) => ({
   payload
 })
 
-const sendCommandFailure = (
+export const sendCommandFailure = (
   command,
   aggregateId,
   aggregateName,
@@ -53,59 +53,59 @@ const sendCommandFailure = (
   error
 })
 
-const subscibeTopic = (appId, topicName, topicId) => ({
+export const subscibeTopic = (appId, topicName, topicId) => ({
   type: SUBSCRIBE_TOPIC,
   appId,
   topicName,
   topicId
 })
 
-const unsubscibeTopic = (appId, topicName, topicId) => ({
+export const unsubscibeTopic = (appId, topicName, topicId) => ({
   type: UNSUBSCRIBE_TOPIC,
   appId,
   topicName,
   topicId
 })
 
-const connectViewModel = (viewModelName, aggregateIds) => ({
+export const connectViewModel = (viewModelName, aggregateIds) => ({
   type: CONNECT_VIEWMODEL,
   viewModelName,
   aggregateIds
 })
 
-const disconnectViewModel = (viewModelName, aggregateIds) => ({
+export const disconnectViewModel = (viewModelName, aggregateIds) => ({
   type: DISCONNECT_VIEWMODEL,
   viewModelName,
   aggregateIds
 })
 
-const loadViewModelStateRequest = (viewModelName, aggregateIds) => ({
+export const loadViewModelStateRequest = (viewModelName, aggregateIds) => ({
   type: LOAD_VIEWMODEL_STATE_REQUEST,
   viewModelName,
   aggregateIds
 })
 
-const loadViewModelStateSuccess = (viewModelName, aggregateIds, state) => ({
+export const loadViewModelStateSuccess = (viewModelName, aggregateIds, state) => ({
   type: LOAD_VIEWMODEL_STATE_SUCCESS,
   viewModelName,
   aggregateIds,
   state
 })
 
-const loadViewModelStateFailure = (viewModelName, aggregateIds, error) => ({
+export const loadViewModelStateFailure = (viewModelName, aggregateIds, error) => ({
   type: LOAD_VIEWMODEL_STATE_FAILURE,
   viewModelName,
   aggregateIds,
   error
 })
 
-const dropViewModelState = (viewModelName, aggregateIds) => ({
+export const dropViewModelState = (viewModelName, aggregateIds) => ({
   type: DROP_VIEWMODEL_STATE,
   viewModelName,
   aggregateIds
 })
 
-const connectReadModel = (
+export const connectReadModel = (
   readModelName,
   resolverName,
   resolverArgs,
@@ -118,7 +118,7 @@ const connectReadModel = (
   isReactive
 })
 
-const disconnectReadModel = (
+export const disconnectReadModel = (
   readModelName,
   resolverName,
   resolverArgs,
@@ -131,7 +131,7 @@ const disconnectReadModel = (
   isReactive
 })
 
-const loadReadModelStateRequest = (
+export const loadReadModelStateRequest = (
   readModelName,
   resolverName,
   resolverArgs
@@ -142,7 +142,7 @@ const loadReadModelStateRequest = (
   resolverArgs
 })
 
-const loadReadModelStateSuccess = (
+export const loadReadModelStateSuccess = (
   readModelName,
   resolverName,
   resolverArgs,
@@ -155,7 +155,7 @@ const loadReadModelStateSuccess = (
   state
 })
 
-const loadReadModelStateFailure = (
+export const loadReadModelStateFailure = (
   readModelName,
   resolverName,
   resolverArgs,
@@ -168,7 +168,7 @@ const loadReadModelStateFailure = (
   error
 })
 
-const applyReadModelDiff = (
+export const applyReadModelDiff = (
   readModelName,
   resolverName,
   resolverArgs,
@@ -181,36 +181,14 @@ const applyReadModelDiff = (
   diff
 })
 
-const dropReadModelState = (readModelName, resolverName, resolverArgs) => ({
+export const dropReadModelState = (readModelName, resolverName, resolverArgs) => ({
   type: DROP_READMODEL_STATE,
   readModelName,
   resolverName,
   resolverArgs
 })
 
-const hotModuleReplacement = () => ({
+export const hotModuleReplacement = () => ({
   type: HOT_MODULE_REPLACEMENT,
   hotModuleReplacementId: uuid()
 })
-
-export default {
-  sendCommandRequest,
-  sendCommandSuccess,
-  sendCommandFailure,
-  subscibeTopic,
-  unsubscibeTopic,
-  connectViewModel,
-  disconnectViewModel,
-  loadViewModelStateRequest,
-  loadViewModelStateSuccess,
-  loadViewModelStateFailure,
-  dropViewModelState,
-  connectReadModel,
-  disconnectReadModel,
-  loadReadModelStateRequest,
-  loadReadModelStateSuccess,
-  loadReadModelStateFailure,
-  applyReadModelDiff,
-  dropReadModelState,
-  hotModuleReplacement
-}

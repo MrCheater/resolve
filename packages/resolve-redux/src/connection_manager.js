@@ -19,10 +19,10 @@ const getRemovedConnections = (prevConnections, nextConnections) =>
   )
 
 const connectionManager = ({
-  subscribe,
-  unsubscribe,
+  subscribe = () => null,
+  unsubscribe = () => null,
   wildcardSymbol = '*'
-}) => {
+} = {}) => {
   const connections = Object.create(null)
 
   const getConnections = () => {
@@ -64,8 +64,13 @@ const connectionManager = ({
 
       const nextConnections = getConnections()
 
-      subscribe(getAddedConnections(prevConnections, nextConnections))
-      unsubscribe(getRemovedConnections(prevConnections, nextConnections))
+      const addedConnections = getAddedConnections(prevConnections, nextConnections)
+      const removedConnections = getRemovedConnections(prevConnections, nextConnections)
+      
+      subscribe(addedConnections)
+      unsubscribe(removedConnections)
+      
+      return { addedConnections, removedConnections }
     },
 
     removeConnection({ connectionName, connectionId }) {
@@ -82,9 +87,14 @@ const connectionManager = ({
       }
 
       const nextConnections = getConnections()
-
-      subscribe(getAddedConnections(prevConnections, nextConnections))
-      unsubscribe(getRemovedConnections(prevConnections, nextConnections))
+  
+      const addedConnections = getAddedConnections(prevConnections, nextConnections)
+      const removedConnections = getRemovedConnections(prevConnections, nextConnections)
+  
+      subscribe(addedConnections)
+      unsubscribe(removedConnections)
+  
+      return { addedConnections, removedConnections }
     }
   }
 }
