@@ -1,3 +1,5 @@
+https://github.com/MrCheater/resolve/blob/b389d36f2dcbb9ea9374cbd5bb45a199fedf9b8f/packages/resolve-redux/test/actions.test.js#L63-L77
+
 # **resolve-redux**
 [![npm version](https://badge.fury.io/js/resolve-redux.svg)](https://badge.fury.io/js/resolve-redux)
 
