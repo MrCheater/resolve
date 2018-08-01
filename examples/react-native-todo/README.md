@@ -19,7 +19,7 @@ Run the example:
     npm run dev:web
     ```
 
-    Runs your the web app in development mode.
+    Runs your web app in development mode.
 
 2. Second Terminal
 
