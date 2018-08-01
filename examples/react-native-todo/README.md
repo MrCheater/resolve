@@ -1,31 +1,38 @@
-# React-Native Todo Example
+# React Native To-Do List Example
 
-This example demonstrates how to work with [react-native (expo)](https://github.com/react-community/create-react-native-app). Get the example using this command:
-
-```sh
-npx create-resolve-app resolve-with-postcss-example -e react-native-todo
-```
+This example demonstrates how to use [React Native](https://github.com/react-community/create-react-native-app) in a reSolve app.
 
 | ![Web](https://user-images.githubusercontent.com/5055654/43512907-fbed0490-9584-11e8-8065-27a26abcbe41.png)           | ![React-native](https://user-images.githubusercontent.com/5055654/43513480-828fe250-9586-11e8-8999-c29114134e33.png) |
 |-----|--------------|
 
-Install the [Expo](https://expo.io) app on your iOS or Android phone, and use the QR code in the terminal to open your app. Find the QR scanner on the Projects tab of the app. When you're ready to share your project with others (for example, by deploying to an app store), read the [Sharing & Deployment](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md#sharing-and-deployment) section of the User Guide.
+Get the example:
 
-To run:
-
-1\) First Terminal
 ```sh
-npm run dev:web
+npx create-resolve-app -e react-native-todo resolve-native-todo
 ```
-Runs your the web app in development mode.
 
-2\) Second Terminal
-```sh
-npm run start:native
-```
-Runs your native app in development mode with an interactive prompt. To run it without a prompt, use the --no-interactive flag.
+Run the example:
 
-Open it in the [Expo app](https://expo.io) on your phone to view it. It will reload if you save edits to your files, and you will see build errors and logs in the terminal.
+1. First Terminal
+
+    ```sh
+    npm run dev:web
+    ```
+
+    Runs your the web app in development mode.
+
+2. Second Terminal
+
+    ```sh
+    npm run start:native
+    ```
+
+    Runs your native app in development mode with an interactive prompt. To run it without a prompt, use the `--no-interactive` flag.
+
+3. Install the [Expo](https://expo.io) app to your iOS or Android phone, and use the QR code from the terminal to open your app. You can find the QR scanner on the **Projects** tab in **Expo**.
+
+When you are ready to share your project with others (for example, by deploying to an app store), refer to the [Sharing & Deployment](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md#sharing-and-deployment) section. 
+
 
 ### Project Structure Overview
 ```
