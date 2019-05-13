@@ -22,7 +22,7 @@ class ShoppingLists extends React.PureComponent {
               <tr key={id}>
                 <td>{index + 1}</td>
                 <td>
-                  <Link to={`/${id}`}>{name}</Link>
+                  <Link to={`/lists/${id}`}>{name}</Link>
                 </td>
                 <td className="example-table-action">
                   <Button

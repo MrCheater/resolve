@@ -1,5 +1,5 @@
 import React from 'react'
-import { ConnectedRouter } from 'react-router-redux'
+import { ConnectedRouter } from 'connected-react-router'
 import Routes from './routes'
 import Providers from './providers'
 
@@ -12,8 +12,7 @@ class AppContainer extends React.PureComponent {
       aggregateActions,
       store,
       history,
-      routes,
-      isSSR
+      routes
     } = this.props
 
     return (
@@ -24,7 +23,7 @@ class AppContainer extends React.PureComponent {
         aggregateActions={aggregateActions}
         store={store}
       >
-        <ConnectedRouter history={history} isSSR={isSSR}>
+        <ConnectedRouter history={history}>
           <Routes routes={routes} />
         </ConnectedRouter>
       </Providers>

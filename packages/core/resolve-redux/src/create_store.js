@@ -4,7 +4,7 @@ import {
   combineReducers,
   compose
 } from 'redux'
-import { routerReducer, routerMiddleware } from 'react-router-redux'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
 import uuid from 'uuid/v4'
 
 import createViewModelsReducer from './create_view_models_reducer'
@@ -32,7 +32,7 @@ const createStore = ({
 
   const combinedReducers = combineReducers({
     ...reducers,
-    router: routerReducer,
+    router: connectRouter(history),
     viewModels: createViewModelsReducer(viewModels),
     readModels: createReadModelsReducer(readModels),
     jwt: createJwtReducer()

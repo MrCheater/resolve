@@ -6,6 +6,7 @@ import {
   deserializeInitialState
 } from 'resolve-redux'
 import { createBrowserHistory } from 'history'
+import { BrowserRouter } from 'react-router-dom'
 
 import routes from '$resolve.routes'
 import rootPath from '$resolve.rootPath'
@@ -47,14 +48,16 @@ var store = createStore({
 })
 
 render(
-  <AppContainer
-    origin={origin}
-    rootPath={rootPath}
-    staticPath={staticPath}
-    aggregateActions={aggregateActions}
-    store={store}
-    history={history}
-    routes={routes}
-  />,
+  <BrowserRouter>
+    <AppContainer
+      origin={origin}
+      rootPath={rootPath}
+      staticPath={staticPath}
+      aggregateActions={aggregateActions}
+      store={store}
+      history={history}
+      routes={routes}
+    />
+  </BrowserRouter>,
   document.getElementsByClassName('app-container')[0]
 )

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/server'
 import { createMemoryHistory } from 'history'
 import jsonwebtoken from 'jsonwebtoken'
 import { createStore, AppContainer } from 'resolve-redux'
+import { StaticRouter } from 'react-router'
 
 import getHtmlMarkup from '../utils/get-html-markup'
 import getStaticBasedPath from '../utils/get-static-based-path'
@@ -58,17 +59,20 @@ const markupHandler = async (req, res) => {
     isClient: false
   })
 
+  const routerContext = {}
+
   const appContainer = (
-    <AppContainer
-      origin={origin}
-      rootPath={rootPath}
-      staticPath={staticPath}
-      aggregateActions={aggregateActions}
-      store={store}
-      history={history}
-      routes={routes}
-      isSSR={true}
-    />
+    <StaticRouter location={url} context={routerContext}>
+      <AppContainer
+        origin={origin}
+        rootPath={rootPath}
+        staticPath={staticPath}
+        aggregateActions={aggregateActions}
+        store={store}
+        history={history}
+        routes={routes}
+      />
+    </StaticRouter>
   )
 
   let markup, styleTags
@@ -94,6 +98,9 @@ const markupHandler = async (req, res) => {
   const faviconUrl = getStaticBasedPath(rootPath, staticPath, 'favicon.ico')
   const hmrUrl = getStaticBasedPath(rootPath, staticPath, 'hmr.js')
 
+  if (routerContext.statusCode) {
+    await res.status(routerContext.statusCode)
+  }
   await res.setHeader('Content-Type', 'text/html')
   await res.end(
     getHtmlMarkup({

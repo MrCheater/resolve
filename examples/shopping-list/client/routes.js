@@ -12,8 +12,9 @@ export default [
         exact: true
       },
       {
-        path: '/:id',
-        component: ShoppingList
+        path: '/lists/:id',
+        component: ShoppingList,
+        exact: true
       }
     ]
   }
