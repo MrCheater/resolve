@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connectReadModel } from 'resolve-redux'
 import { connect } from 'react-redux'
 
+import App from '../containers/App'
 import ShoppingLists from '../components/ShoppingLists'
 import ShoppingListCreator from '../components/ShoppingListCreator'
 
@@ -36,9 +37,15 @@ export const mapStateToProps = state => ({
 export const mapDispatchToProps = (dispatch, { aggregateActions }) =>
   bindActionCreators(aggregateActions, dispatch)
 
-export default connectReadModel(mapStateToOptions)(
+export const Connector = connectReadModel(mapStateToOptions)(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(MyLists)
+)
+
+export default props => (
+  <App match={props.match}>
+    <Connector {...props} />
+  </App>
 )

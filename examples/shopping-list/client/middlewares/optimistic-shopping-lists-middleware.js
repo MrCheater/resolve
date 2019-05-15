@@ -4,11 +4,11 @@ import {
   OPTIMISTIC_CREATE_SHOPPING_LIST,
   OPTIMISTIC_REMOVE_SHOPPING_LIST,
   OPTIMISTIC_SYNC
-} from '../actions/optimistic_actions'
+} from '../actions/optimistic-actions'
 
 const { SEND_COMMAND_SUCCESS, LOAD_READMODEL_STATE_SUCCESS } = actionTypes
 
-const optimistic_shopping_lists_middleware = store => next => action => {
+const optimisticShoppingListsMiddleware = store => next => action => {
   if (
     action.type === SEND_COMMAND_SUCCESS &&
     action.commandType === 'createShoppingList'
@@ -44,4 +44,4 @@ const optimistic_shopping_lists_middleware = store => next => action => {
   next(action)
 }
 
-export default optimistic_shopping_lists_middleware
+export default optimisticShoppingListsMiddleware

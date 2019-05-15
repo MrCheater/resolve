@@ -2,6 +2,7 @@ import React from 'react'
 import { ConnectedRouter } from 'connected-react-router'
 import Routes from './routes'
 import Providers from './providers'
+import { Route } from 'react-router'
 
 class AppContainer extends React.PureComponent {
   render() {
@@ -23,7 +24,18 @@ class AppContainer extends React.PureComponent {
         aggregateActions={aggregateActions}
         store={store}
       >
+        <Route
+          render={props => {
+            console.log('!!!!!!!!!!!!!!!!!')
+            console.log(props)
+            if (props.staticContext) {
+              props.staticContext.statusCode = 404
+            }
+            return null
+          }}
+        />
         <ConnectedRouter history={history}>
+
           <Routes routes={routes} />
         </ConnectedRouter>
       </Providers>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { connectViewModel } from 'resolve-redux'
-import { routerActions } from 'react-router-redux'
+import { connectReadModel, connectViewModel } from 'resolve-redux'
 import { Redirect } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import {
@@ -19,6 +18,7 @@ import {
 
 import Image from './Image'
 import NotFound from '../components/NotFound'
+import App from './App'
 
 export class ShoppingList extends React.PureComponent {
   state = {
@@ -175,17 +175,18 @@ export const mapStateToProps = (state, ownProps) => {
 }
 
 export const mapDispatchToProps = (dispatch, { aggregateActions }) =>
-  bindActionCreators(
-    {
-      ...aggregateActions,
-      replaceUrl: routerActions.replace
-    },
-    dispatch
-  )
+  bindActionCreators(aggregateActions, dispatch)
 
-export default connectViewModel(mapStateToOptions)(
+export const Connector = connectViewModel(mapStateToOptions)(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(ShoppingList)
 )
+
+export default props => (
+  <App match={props.match}>
+    <Connector {...props} />
+  </App>
+)
+

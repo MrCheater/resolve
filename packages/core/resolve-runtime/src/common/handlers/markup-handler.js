@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/server'
 import { createMemoryHistory } from 'history'
 import jsonwebtoken from 'jsonwebtoken'
 import { createStore, AppContainer } from 'resolve-redux'
-import { StaticRouter } from 'react-router'
+import { Route, StaticRouter } from 'react-router'
 
 import getHtmlMarkup from '../utils/get-html-markup'
 import getStaticBasedPath from '../utils/get-static-based-path'
@@ -17,6 +17,7 @@ try {
 } catch (err) {}
 
 const markupHandler = async (req, res) => {
+  console.log(111)
   const {
     seedClientEnvs,
     aggregateActions,
@@ -59,7 +60,7 @@ const markupHandler = async (req, res) => {
     isClient: false
   })
 
-  const routerContext = {}
+  const routerContext = { statusCode: 200 }
 
   const appContainer = (
     <StaticRouter location={url} context={routerContext}>
@@ -92,14 +93,15 @@ const markupHandler = async (req, res) => {
 
     styleTags = ''
   }
+  const { statusCode } = routerContext
 
   const initialState = store.getState()
   const bundleUrl = getStaticBasedPath(rootPath, staticPath, 'bundle.js')
   const faviconUrl = getStaticBasedPath(rootPath, staticPath, 'favicon.ico')
   const hmrUrl = getStaticBasedPath(rootPath, staticPath, 'hmr.js')
 
-  if (routerContext.statusCode) {
-    await res.status(routerContext.statusCode)
+  if (statusCode) {
+    await res.status(statusCode)
   }
   await res.setHeader('Content-Type', 'text/html')
   await res.end(
