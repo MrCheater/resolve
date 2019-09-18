@@ -4,8 +4,7 @@
   "description": "API tests for resolve",
   "private": true,
   "scripts": {
-    "test": "echo || exit 0",
-    "test:integrational": "jest --config=../jest.config.js --testMatch=**/*.test.js"
+    "test": "echo || exit 0"
   },
   "devDependencies": {
     "jest": "24.1.0",
