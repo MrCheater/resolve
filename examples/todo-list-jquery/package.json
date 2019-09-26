@@ -1,0 +1,17 @@
+{
+  "name": "todo-list-jquery",
+  "version": "0.20.28",
+  "description": "shows how to work with read-models and view-models",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "rollup": "^1.21.4",
+    "rollup-plugin-resolvejs": "0.20.28",
+    "rollup-plugin-node-resolve":"^5.2.0",
+    "rollup-plugin-commonjs":"^10.1.0"
+  }
+}

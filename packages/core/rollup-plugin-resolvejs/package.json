@@ -1,0 +1,42 @@
+{
+  "name": "rollup-plugin-resolvejs",
+  "version": "0.20.28",
+  "description": "rollup-plugin-resolvejs",
+  "engines": {
+    "node": ">=8.10"
+  },
+  "repository": "https://github.com/reimagined/resolve.git",
+  "author": "reimagined team",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "keywords": [
+    "cqrs",
+    "eventsourcing",
+    "es",
+    "ddd"
+  ],
+  "scripts": {
+    "test": "jest --config=../../../jest.config.js --verbose",
+    "testw": "jest --config=../../../jest.config.js --watchAll"
+  },
+  "bugs": {
+    "url": "https://github.com/reimagined/resolve/issues"
+  },
+  "homepage": "https://github.com/reimagined/resolve/tree/master/packages/core/rrollup-plugin-resolvejs#readme",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    "jest": "24.1.0",
+    "lodash.escaperegexp": "4.1.2",
+    "sinon": "7.2.2"
+  },
+  "babelCompile": [
+    {
+      "moduleType": "cjs",
+      "moduleTarget": "server",
+      "inputDir": "./src",
+      "outDir": "./lib"
+    }
+  ]
+}
