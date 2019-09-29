@@ -1,77 +1,55 @@
-import path from 'path';
+import path from 'path'
 
-const PREFIX = `\0virtual:`;
+import getConfig from './get-config'
+import getVirtualModules from './virtual'
 
+const PREFIX = `\0virtual:`
 
-export default function virtual({
-  aggregates
-}) {
-  console.log(aggregates)
+export default function plugin(options) {
+  const config = getConfig(options)
 
-  const modules = {
-    '$resolve.aggregates': [
-      ...aggregates.map(
-        (aggregatePath, aggregateIndex) => `import { name as aggregate_name_${
-          aggregateIndex
-        }, projection as aggregate_projection_${
-          aggregateIndex
-        }, commands as aggregate_commands_${
-          aggregateIndex
-        } } from ${
-          JSON.stringify(path.join(
-            process.cwd(),
-            aggregatePath
-          ))
-        }`
-      ),
-      ``,
-      `export default [`,
-      aggregates.map(
-        (aggregatePath, aggregateIndex) => `{ name: aggregate_name_${
-          aggregateIndex
-        }, projection: aggregate_projection_${
-          aggregateIndex
-        }, commands: aggregate_commands_${
-          aggregateIndex
-        }}`
-      ).join(','),
-      `]`
-    ].join('\n'),
-    '$resolve.local-entry': [
-      `import aggregates from '$resolve.aggregates'`,
-      ``,
-      `export { aggregates }`
-    ].join('\n')
+  const virtualModules = getVirtualModules(config)
+
+  const resolvedIds = new Map()
+
+  for (let id in virtualModules) {
+    if (!virtualModules.hasOwnProperty(id)) {
+      continue
+    }
+    resolvedIds.set(path.resolve(id), virtualModules[id])
   }
-
-  const resolvedIds = new Map();
-
-  Object.keys(modules).forEach(id => {
-    resolvedIds.set(path.resolve(id), modules[id]);
-  });
 
   return {
     name: 'resolvejs',
 
     resolveId(id, importer) {
-      if (id in modules) {
-        console.log(PREFIX + id)
-        return PREFIX + id;
+      if (id in virtualModules) {
+        return PREFIX + id
       }
 
       if (importer) {
-        if (importer.startsWith(PREFIX)) importer = importer.slice(PREFIX.length);
-        const resolved = path.resolve(path.dirname(importer), id);
-        if (resolvedIds.has(resolved)) return PREFIX + resolved;
+        const resolved = path.resolve(
+          path.dirname(
+            importer.startsWith(PREFIX)
+              ? importer.slice(PREFIX.length)
+              : importer
+          ),
+          id
+        )
+        if (resolvedIds.has(resolved)) {
+          return PREFIX + resolved
+        }
       }
     },
 
-    load(id) {
+    async load(id) {
       if (id.startsWith(PREFIX)) {
-        id = id.slice(PREFIX.length);
+        const resolvedId = id.slice(PREFIX.length)
 
-        return id in modules ? modules[id] : resolvedIds.get(id);
+        return resolvedId in virtualModules
+          ? await virtualModules[resolvedId]
+          : resolvedIds.get(resolvedId)
       }
     }
-  };
+  }
 }

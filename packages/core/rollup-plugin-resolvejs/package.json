@@ -23,9 +23,7 @@
     "url": "https://github.com/reimagined/resolve/issues"
   },
   "homepage": "https://github.com/reimagined/resolve/tree/master/packages/core/rrollup-plugin-resolvejs#readme",
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "devDependencies": {
     "jest": "24.1.0",
     "lodash.escaperegexp": "4.1.2",
