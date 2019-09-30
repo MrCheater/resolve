@@ -6,7 +6,6 @@
     "node": ">=8.10"
   },
   "main": "./lib/index.js",
-  "module": "./es/index.js",
   "bugs": {
     "url": "https://github.com/reimagined/resolve/issues"
   },
@@ -33,12 +32,6 @@
     "jest": "24.1.0"
   },
   "babelCompile": [
-    {
-      "moduleType": "es",
-      "moduleTarget": "server",
-      "inputDir": "./src",
-      "outDir": "./es"
-    },
     {
       "moduleType": "cjs",
       "moduleTarget": "server",

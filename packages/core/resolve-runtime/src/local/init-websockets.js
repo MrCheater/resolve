@@ -4,12 +4,14 @@ import http from 'http'
 import MqttConnection from 'mqtt-connection'
 import createSocketServer from 'socket.io'
 import getWebSocketStream from 'websocket-stream'
-import { Server as WebSocketServer } from 'ws'
+import WebSocket from 'ws'
 import uuid from 'uuid/v4'
 
 import createPubsubManager from './create-pubsub-manager'
 import getRootBasedUrl from '../common/utils/get-root-based-url'
 import getSubscribeAdapterOptions from './get-subscribe-adapter-options'
+
+const WebSocketServer = WebSocket.Server
 
 const log = debugLevels('resolve:resolve-runtime:local-subscribe-adapter')
 

@@ -3,7 +3,7 @@ import path from 'path'
 import getConfig from './get-config'
 import getVirtualModules from './virtual'
 
-const PREFIX = `\0virtual:`
+const PREFIX = `\0resolvejs:`
 
 export default function plugin(options) {
   const config = getConfig(options)
@@ -50,6 +50,41 @@ export default function plugin(options) {
           ? await virtualModules[resolvedId]
           : resolvedIds.get(resolvedId)
       }
+    },
+
+    options(opts) {
+      // const external = [
+      //   ...opts.external,
+      //   'zeromq',
+      //   'zeromq-ng',
+      //   ...JSON.parse(process.env.__RESOLVE_PACKAGES__)
+      // ]
+
+      const external = id => {
+        if (typeof opts.external === 'function' && opts.external(id)) {
+          return true
+        }
+
+        if (Array.isArray(opts.external) && opts.external.includes(id)) {
+          return true
+        }
+
+        /**
+         * The `id` argument is a resolved path if `rollup-plugin-node-resolve`
+         * and `rollup-plugin-commonjs` are included.
+         */
+        const resolvedPath = safeResolve(id)
+
+        if (resolvedPath === null) {
+          return false
+        }
+
+        const resolvedDirname = path.dirname(resolvedPath)
+
+        return ids.some(idx => resolvedDirname.startsWith(path.dirname(idx)))
+      }
+
+      return Object.assign({}, opts, { external })
     }
   }
 }
