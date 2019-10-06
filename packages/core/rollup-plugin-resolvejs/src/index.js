@@ -27,11 +27,8 @@ const safeResolve = query => {
   }
 }
 
-const virtualMixin = (config, customVirtualModules) => {
-  const virtualModules = {
-    ...getVirtualModules(config),
-    ...customVirtualModules
-  }
+const virtualMixin = config => {
+  const virtualModules = getVirtualModules()
 
   const resolvedIds = new Map()
 
@@ -73,7 +70,7 @@ const virtualMixin = (config, customVirtualModules) => {
         const resolvedId = id.slice(PREFIX.length)
 
         return resolvedId in virtualModules
-          ? (await virtualModules[resolvedId])(JSON.parse(query))
+          ? (await virtualModules[resolvedId])(config, JSON.parse(query))
           : resolvedIds.get(resolvedId)
       }
     }
@@ -165,7 +162,7 @@ const replaceInputMixin = (config, input) => {
           'You must supply options.input to rollup [rollup-plugin-resolvejs]'
         )
       }
-      if (input.constructor !== String) {
+      if (customerClientEntry.constructor !== String) {
         throw new Error(
           'options.input must be a string [rollup-plugin-resolvejs]'
         )
@@ -287,17 +284,7 @@ export function resolveClient(options) {
   const config = getConfig(options)
 
   return composeMixins({ name: 'resolvejs/local-entry' }, [
-    replaceInputMixin(config, '$resolve.customer-client-entry'),
-    virtualMixin(config, {
-      '$resolve.customer-client-entry': ({ customerClientEntry }) =>
-        [
-          `import wrapClient from "$resolve.client"`,
-          `import customerClientEntry from ${JSON.stringify(
-            customerClientEntry
-          )}`,
-          ``,
-          `export default wrapClient(customerClientEntry)`
-        ].join('\n')
-    })
+    replaceInputMixin(config, '$resolve.wrap-client'),
+    virtualMixin(config)
   ])
 }

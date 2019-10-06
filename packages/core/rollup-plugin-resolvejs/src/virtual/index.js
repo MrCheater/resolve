@@ -4,7 +4,7 @@ import path from 'path'
 const isJavaScriptFile = /\.js$/
 const isIndex = /index\.js$/
 
-export default config =>
+export default () =>
   fs
     .readdirSync(__dirname)
     .filter(
@@ -15,7 +15,7 @@ export default config =>
     .map(virtualModulePath => ({
       [path.parse(virtualModulePath).name]: import(
         path.join(__dirname, virtualModulePath)
-      ).then(({ default: getCode }) => getCode(config))
+      ).then(({ default: getCode }) => getCode)
     }))
     .reduce((acc, val) => {
       Object.assign(acc, val)

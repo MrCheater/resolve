@@ -1,4 +1,4 @@
-export default () => () => {
+export default () => {
   return [
     `import aggregates from '$resolve.aggregates'`,
     ``,
