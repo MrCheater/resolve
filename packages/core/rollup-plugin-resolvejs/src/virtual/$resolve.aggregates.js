@@ -1,4 +1,4 @@
-export default ({ aggregates }) => {
+export default ({ aggregates }) => () => {
   return [
     ...aggregates.map(
       (aggregatePath, aggregateIndex) =>

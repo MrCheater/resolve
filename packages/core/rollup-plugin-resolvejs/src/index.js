@@ -1,4 +1,6 @@
 import path from 'path'
+import Module from 'module'
+import fs from 'fs'
 import generatePackageJson from 'rollup-plugin-generate-package-json'
 
 import getConfig from './get-config'
@@ -7,9 +9,20 @@ import getVirtualModules from './virtual'
 const PREFIX = `\0resolvejs:`
 
 const safeResolve = query => {
+  const fromDirectory = process.cwd()
+
+  const fromFile = path.join(fromDirectory, '__noop__.js')
+
+  const resolveFileName = () =>
+    Module._resolveFilename(query, {
+      id: fromFile,
+      filename: fromFile,
+      paths: Module._nodeModulePaths(fromDirectory)
+    })
+
   try {
-    return require.resolve(query)
-  } catch (err) {
+    return resolveFileName()
+  } catch (error) {
     return null
   }
 }
@@ -26,15 +39,16 @@ const virtualMixin = (config, customVirtualModules) => {
     if (!virtualModules.hasOwnProperty(id)) {
       continue
     }
+
     resolvedIds.set(path.resolve(id), virtualModules[id])
   }
 
   return {
-    resolveId(id, importer) {
-      console.log(this)
+    resolveId(idAndQuery, importer) {
+      const id = idAndQuery.replace(/\?.*/, '')
 
       if (id in virtualModules) {
-        return PREFIX + id
+        return PREFIX + idAndQuery
       }
 
       if (importer) {
@@ -52,12 +66,14 @@ const virtualMixin = (config, customVirtualModules) => {
       }
     },
 
-    async load(id) {
-      if (id.startsWith(PREFIX)) {
+    async load(idAndQuery) {
+      if (idAndQuery.startsWith(PREFIX)) {
+        const [, id, , query = '{}'] = idAndQuery.match(/^([^\?]*)(\?(.+))?$/)
+
         const resolvedId = id.slice(PREFIX.length)
 
         return resolvedId in virtualModules
-          ? await virtualModules[resolvedId]
+          ? (await virtualModules[resolvedId])(JSON.parse(query))
           : resolvedIds.get(resolvedId)
       }
     }
@@ -131,7 +147,20 @@ const mergeInputMixin = (config, input) => {
 const replaceInputMixin = (config, input) => {
   return {
     options(opts) {
-      if (input == null) {
+      let customerClientEntry = opts.input
+
+      if (Array.isArray(customerClientEntry)) {
+        if (customerClientEntry.length === 1) {
+          customerClientEntry = customerClientEntry[0]
+        }
+      } else if (Object(customerClientEntry) === customerClientEntry) {
+        const keys = Object.keys(customerClientEntry)
+        if (keys.length === 1) {
+          customerClientEntry = customerClientEntry[keys[0]]
+        }
+      }
+
+      if (customerClientEntry == null) {
         throw new Error(
           'You must supply options.input to rollup [rollup-plugin-resolvejs]'
         )
@@ -141,10 +170,14 @@ const replaceInputMixin = (config, input) => {
           'options.input must be a string [rollup-plugin-resolvejs]'
         )
       }
+
+      const resolvedPath = safeResolve(customerClientEntry)
+
       return {
         ...opts,
-        input: `${input}?query=${JSON.stringify({
-          customerClientEntry: opts.input
+        input: `${input}?${JSON.stringify({
+          customerClientEntry:
+            resolvedPath == null ? customerClientEntry : resolvedPath
         })}`
       }
     }
@@ -256,12 +289,15 @@ export function resolveClient(options) {
   return composeMixins({ name: 'resolvejs/local-entry' }, [
     replaceInputMixin(config, '$resolve.customer-client-entry'),
     virtualMixin(config, {
-      '$resolve.customer-client-entry': [
-        `import wrapClient from "$resolve.client"`,
-        `import customerClientEntry from ${JSON.stringify(options.input)}`,
-        ``,
-        `export default wrapClient(customerClientEntry)`
-      ].join('\n')
+      '$resolve.customer-client-entry': ({ customerClientEntry }) =>
+        [
+          `import wrapClient from "$resolve.client"`,
+          `import customerClientEntry from ${JSON.stringify(
+            customerClientEntry
+          )}`,
+          ``,
+          `export default wrapClient(customerClientEntry)`
+        ].join('\n')
     })
   ])
 }
