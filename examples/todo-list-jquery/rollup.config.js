@@ -1,7 +1,7 @@
 import {
   resolveClient,
-  resolveLocalEntry
-  //resolveCloudEntry
+  resolveLocalEntry,
+  resolveCloudEntry
 } from 'rollup-plugin-resolvejs'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
@@ -20,19 +20,16 @@ export default [
     ],
     plugins: [nodeResolve(), resolveLocalEntry(config)]
   },
-  // {
-  //   output: [
-  //     {
-  //       dir: 'dist',
-  //       format: 'cjs',
-  //       sourcemap: true
-  //     }
-  //   ],
-  //   plugins: [
-  //     nodeResolve(),
-  //     resolveCloudEntry(config)
-  //   ]
-  // },
+  {
+    output: [
+      {
+        dir: 'dist',
+        format: 'cjs',
+        sourcemap: true
+      }
+    ],
+    plugins: [nodeResolve(), resolveCloudEntry(config)]
+  },
   {
     input: './client.js',
     output: [

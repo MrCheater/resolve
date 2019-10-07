@@ -1,8 +1,8 @@
 export default () => {
   return [
     `import aggregates from '$resolve.aggregates'`,
-    `import localEntry from 'resolve-runtime/es/local'`,
+    `import cloudEntry from 'resolve-runtime/es/cloud'`,
     ``,
-    `localEntry({ aggregates })`
+    `cloudEntry({ aggregates })`
   ].join('\n')
 }
