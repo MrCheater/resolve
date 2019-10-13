@@ -1,4 +1,4 @@
-import safeResolve from '../safe-resolve'
+import resolve from '../resolve'
 
 const externalMixin = () => {
   const regExpRelativeNodeModule = /(?!^resolve-runtime(\/.*)?$)^(@[a-zA-Z0-9._-]+\/)?([a-zA-Z0-9._-]+)(\/.*)?$/
@@ -16,7 +16,7 @@ const externalMixin = () => {
           return true
         }
 
-        const resolvedPath = safeResolve(id)
+        const resolvedPath = resolve(id, { safe: true })
 
         if (resolvedPath === null) {
           return false

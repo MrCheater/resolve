@@ -3,23 +3,26 @@ import Module from 'module'
 
 import { BUILD_ID } from './constants'
 
-const safeResolve = query => {
+const resolve = (query, { safe, fallback } = {}) => {
   const fromDirectory = process.cwd()
 
   const fromFile = path.join(fromDirectory, `__noop__${BUILD_ID}.js`)
 
-  const resolveFileName = () =>
-    Module._resolveFilename(query, {
+  try {
+    return Module._resolveFilename(query, {
       id: fromFile,
       filename: fromFile,
       paths: Module._nodeModulePaths(fromDirectory)
     })
-
-  try {
-    return resolveFileName()
   } catch (error) {
-    return null
+    if (fallback) {
+      return resolve(fallback, { safe })
+    } else if (safe) {
+      return null
+    } else {
+      throw error
+    }
   }
 }
 
-export default safeResolve
+export default resolve

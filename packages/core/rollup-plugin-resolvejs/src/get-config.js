@@ -1,7 +1,9 @@
+import resolve from './resolve'
+
 const getConfig = ({ aggregates, ...other }) => {
   return {
     ...other,
-    aggregates
+    aggregates: aggregates.map(aggregate => resolve(aggregate))
   }
 }
 

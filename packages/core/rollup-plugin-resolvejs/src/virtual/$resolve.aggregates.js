@@ -1,11 +1,11 @@
-import safeResolve from '../safe-resolve'
+import resolve from '../resolve'
 
 export default ({ aggregates }) => {
   return [
     ...aggregates.map(
       (aggregatePath, aggregateIndex) =>
         `import { name as aggregate_name_${aggregateIndex}, projection as aggregate_projection_${aggregateIndex}, commands as aggregate_commands_${aggregateIndex} } from ${JSON.stringify(
-          safeResolve(aggregatePath)
+          resolve(aggregatePath)
         )}`
     ),
     ``,

@@ -12,7 +12,6 @@ const manualChunksMixin = ({ aggregates }) => {
         if (aggregates.includes(id)) {
           return `resolve/aggregates/${path.parse(id).name}`
         }
-
         if (id.startsWith(PREFIX)) {
           return `resolve/${id.slice(PREFIX.length)}`
         }

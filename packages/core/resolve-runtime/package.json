@@ -26,7 +26,6 @@
   "homepage": "https://github.com/reimagined/resolve/tree/master/packages/core/resolve-runtime#readme",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "aws-sdk": "^2.369.0",
     "aws-signature-v4": "^1.3.0",
     "aws-xray-sdk-core": "^2.3.3",
     "cron": "^1.5.0",
@@ -59,6 +58,7 @@
     "resolve-zeromq": "0.20.28"
   },
   "peerDependencies": {
+    "aws-sdk": "^2.488.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "styled-components": "^4.0.0",

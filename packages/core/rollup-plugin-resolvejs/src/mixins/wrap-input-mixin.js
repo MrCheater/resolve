@@ -1,4 +1,4 @@
-import safeResolve from '../safe-resolve'
+import resolve from '../resolve'
 
 const wrapInputMixin = () => {
   return {
@@ -27,13 +27,12 @@ const wrapInputMixin = () => {
         )
       }
 
-      const resolvedPath = safeResolve(customerClientEntry)
+      const resolvedPath = resolve(customerClientEntry)
 
       return {
         ...opts,
         input: `$resolve.wrap-client?${JSON.stringify({
-          customerClientEntry:
-            resolvedPath == null ? customerClientEntry : resolvedPath
+          customerClientEntry: resolvedPath
         })}`
       }
     }
